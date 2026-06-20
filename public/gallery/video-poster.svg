@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 680">
+  <rect width="900" height="680" fill="#0B0E0A"/>
+  <rect x="90" y="90" width="720" height="500" rx="40" fill="#101314" stroke="#23262A" stroke-width="3"/>
+  <circle cx="450" cy="340" r="96" fill="#D4FF3F"/>
+  <path d="M423 292v96l82-48z" fill="#0B0E0A"/>
+  <text x="450" y="512" text-anchor="middle" font-family="Arial" font-size="32" font-weight="900" fill="#F5F5F2">Add your project video</text>
+</svg>

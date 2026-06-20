@@ -1,0 +1,29 @@
+{
+  "name": "rafi-frisk-style-agency",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "latest",
+    "framer-motion": "latest",
+    "lucide-react": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "swiper": "latest"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.9",
+    "playwright": "^1.61.0",
+    "tailwindcss": "latest"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
+  }
+}
