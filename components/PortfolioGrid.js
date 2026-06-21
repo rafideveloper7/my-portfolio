@@ -6,13 +6,24 @@ import { useMemo, useState } from "react";
 import { filters, projects } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
 
-export default function PortfolioGrid({ limit }) {
+export default function PortfolioGrid({ limit, startIndex = 0, layout = "grid" }) {
   const [active, setActive] = useState("All");
   const [selected, setSelected] = useState(null);
+  
   const visible = useMemo(() => {
+    // First filter by category
     const filtered = active === "All" ? projects : projects.filter((project) => project.category === active);
-    return limit ? filtered.slice(0, limit) : filtered;
-  }, [active, limit]);
+    
+    // Then apply startIndex and limit
+    let result = filtered;
+    if (startIndex > 0) {
+      result = result.slice(startIndex);
+    }
+    if (limit) {
+      result = result.slice(0, limit);
+    }
+    return result;
+  }, [active, limit, startIndex]);
 
   return (
     <>
@@ -32,13 +43,43 @@ export default function PortfolioGrid({ limit }) {
         </div>
       )}
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence mode="popLayout">
-          {visible.map((project, index) => (
-            <ProjectCard key={project.title} project={project} onDetails={setSelected} priority={index === 0} />
-          ))}
-        </AnimatePresence>
-      </div>
+      {/* Conditional layout based on prop */}
+      {layout === "slider" ? (
+        // Slider layout - horizontal flex row
+        <div className="flex flex-nowrap gap-4 sm:gap-6">
+          <AnimatePresence mode="popLayout">
+            {visible.map((project, index) => (
+              <div 
+                key={project.title} 
+                className="flex-shrink-0"
+                style={{
+                  width: 'calc(100vw - 3rem)',
+                }}
+              >
+                <ProjectCard 
+                  project={project} 
+                  onDetails={setSelected} 
+                  priority={index === 0}
+                />
+              </div>
+            ))}
+          </AnimatePresence>
+        </div>
+      ) : (
+        // Grid layout - default
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {visible.map((project, index) => (
+              <ProjectCard 
+                key={project.title} 
+                project={project} 
+                onDetails={setSelected} 
+                priority={index === 0} 
+              />
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
 
       <AnimatePresence>
         {selected && (
@@ -49,14 +90,20 @@ export default function PortfolioGrid({ limit }) {
                   <p className="text-xs font-black uppercase tracking-[.16em] text-lime">{selected.category}</p>
                   <h3 className="mt-2 font-display text-3xl font-black">{selected.title}</h3>
                 </div>
-                <button onClick={() => setSelected(null)} className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line" aria-label="Close project details">
+                <button 
+                  onClick={() => setSelected(null)} 
+                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line" 
+                  aria-label="Close project details"
+                >
                   <X size={20} />
                 </button>
               </div>
               <p className="mt-4 leading-7 text-muted">{selected.description}</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {selected.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-line px-3 py-1 text-xs font-bold text-muted">{tag}</span>
+                  <span key={tag} className="rounded-full border border-line px-3 py-1 text-xs font-bold text-muted">
+                    {tag}
+                  </span>
                 ))}
               </div>
             </div>

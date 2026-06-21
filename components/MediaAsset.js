@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function MediaAsset({ media, priority = false, className = "" }) {
   if (!media) return null;
 
-  const commonClass = `h-full w-full object-cover ${className}`;
+  const commonClass = `h-full w-full object-contain ${className}`;
 
   if (media.type === "video") {
     return (

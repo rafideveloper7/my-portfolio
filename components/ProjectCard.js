@@ -11,7 +11,7 @@ export default function ProjectCard({ project, onDetails, priority = false }) {
       initial={{ opacity: 0, y: 22 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 22 }}
-      className="w-[80%] h-[400px] group overflow-hidden rounded-[1.25rem] border-3 border-line bg-coal hover:border-green-300"
+      className="w-[80vw] md:w-[30vw] h-[350px] group overflow-hidden rounded-[1.25rem] border-3 border-white bg-coal hover:border-green-300"
     >
       <div className="relative aspect-[1.24] overflow-hidden bg-panel">
         <Image
@@ -20,7 +20,7 @@ export default function ProjectCard({ project, onDetails, priority = false }) {
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={priority}
-          className="object-cover transition duration-500 group-hover:scale-105"
+          className="object-contain transition duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-3 bottom-3 translate-y-3 rounded-2xl border border-white/10 bg-ink/88 p-4 opacity-0 backdrop-blur transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
           <p className="text-sm leading-6 text-muted">{project.description}</p>

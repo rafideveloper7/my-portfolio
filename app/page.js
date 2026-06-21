@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowUpRight } from "lucide-react";
 import Button from "@/components/Button";
 import Container from "@/components/Container";
@@ -14,27 +16,28 @@ import { homeContent } from "@/data/pageContent";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
 import MediaAsset from "@/components/MediaAsset";
+import FeaturedProjectsSlider from "@/components/FeatureProjectsSlider";
 
 export default function Home() {
   const mainAboutImg =
     "https://res.cloudinary.com/dtsn7jlsf/image/upload/v1781846663/WhatsApp_Image_2026-06-19_at_10.19.44_AM_1_xjiooq.jpg";
+
   return (
-    <main>
+    <main className="overflow-x-hidden">
       <Hero />
       <Marquee />
 
-
-     {/* main about sec */}
+      {/* Main About Section */}
       <section className="section-pad">
-        <Container className="relative w-[100vw] h-auto">
-          <div className="w-fit h-[fit-content] border rounded-[20px] border-gray-700  flex flex-wrap md:flex-nowrap items-center p-6 gap-6 hover:border-green-300 hover:border-1 mx-auto ">
-            {/* Left Column: Header Information */}
-            <div className="flex flex-col gap-6 items-start h-fit">
+        <Container>
+          {/* Main Content Box: Grid on large screens, stacked on small mobile */}
+          <div className="w-full grid grid-cols-1 lg:grid-cols-12 items-center p-6 md:p-10 gap-8 md:gap-12 border rounded-[24px] border-gray-800 hover:border-green-300 transition-colors duration-300 mx-auto bg-coal/40 back-blur-sm">
+            {/* Left Column: Header Information (Spans 7 out of 12 columns on large screens) */}
+            <div className="flex flex-col gap-6 items-start lg:col-span-7 w-full">
               <SectionHeader
-              className="hover:text-green-600"
+                className="hover:text-green-600 transition-colors duration-200"
                 eyebrow={homeContent.aboutTeaser.eyebrow}
                 title={homeContent.aboutTeaser.title}
-                // text={site.about.split("\n\n")[0]}
                 text={site.about.split("\n\n")[2]}
               />
               <Button
@@ -46,17 +49,20 @@ export default function Home() {
               </Button>
             </div>
 
-            {/* Right Column: Visual Image adjusting to natural content height */}
-            <Reveal className="relative w-fit h-fit">
-              {/* Blur background effect */}
+            {/* Right Column: Media Wrapper (Spans 5 out of 12 columns on large screens) */}
+            <Reveal className="relative w-full lg:col-span-5 flex justify-center items-center">
+              {/* Decorative background aura radial blur */}
               <div className="absolute -inset-4 rounded-[2rem] bg-lime/10 blur-2xl pointer-events-none" />
-              
-              {/* Image Container adapts to the image height */}
-              <div className="w-[fit-content] h-fit relative overflow-hidden rounded-[1.75rem] border border-line bg-coal shadow-2xl">
-                <img
-                  src={mainAboutImg}
-                  alt="myImage"
-                  className="w-[300px] block" 
+
+              {/* Media Aspect Ratio Box: Built for Next.js Image fill layout without breaking */}
+              <div className="relative w-full aspect-[4/3] min-h-[260px] sm:min-h-[320px] md:min-h-[380px] lg:min-h-0 overflow-hidden rounded-[1.75rem] border border-line bg-coal shadow-2xl">
+                <MediaAsset
+                  media={{
+                    type: "image",
+                    src: mainAboutImg,
+                    alt: "Development team collaborating on code solution architecture",
+                  }}
+                  priority={true}
                 />
               </div>
             </Reveal>
@@ -64,7 +70,7 @@ export default function Home() {
         </Container>
       </section>
 
-    {/* services sec in home */}
+      {/* Services Section */}
       <section className="section-pad bg-[#080a08]">
         <Container>
           <SectionHeader
@@ -83,28 +89,35 @@ export default function Home() {
           </div>
         </Container>
       </section>
-            {/* projects sec in home */}
-      <section className="section-pad">
-        <Container>
-          <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeader
-              eyebrow={homeContent.featuredProjects.eyebrow}
-              title={homeContent.featuredProjects.title}
-            />
-            <Reveal>
-              <Button
-              className="border-3"
-                href={homeContent.featuredProjects.button.href}
-                variant="secondary"
-              >
-                {homeContent.featuredProjects.button.label}
-              </Button>
-            </Reveal>
-          </div>
-          <PortfolioGrid limit={3} />
-        </Container>
-      </section>
 
+      {/* Projects Section */}
+      <section className="section-pad bg-[#080a08]/30 overflow-hidden">
+  <Container>
+    {/* Header block */}
+    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="max-w-md">
+        <SectionHeader
+          eyebrow={homeContent.featuredProjects.eyebrow}
+          title={homeContent.featuredProjects.title}
+        />
+      </div>
+      <Reveal className="shrink-0">
+        <Button
+          className="py-2 px-4 text-sm"
+          href={homeContent.featuredProjects.button.href}
+          variant="secondary"
+        >
+          {homeContent.featuredProjects.button.label}
+        </Button>
+      </Reveal>
+    </div>
+    
+    {/* SLIDER Featutred projects on home page*/}
+    <FeaturedProjectsSlider />
+    
+  </Container>
+</section>
+      {/* Why Choose Us Section */}
       <section className="section-pad bg-[#080a08]">
         <Container>
           <div className="grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
@@ -113,13 +126,14 @@ export default function Home() {
               title={homeContent.whyChoose.title}
               text={homeContent.whyChoose.text}
             />
-            <Reveal>
-              <Stats />
+            <Reveal className=" w-full text-center">
+              <Stats  />
             </Reveal>
           </div>
         </Container>
       </section>
 
+      {/* Testimonials Section */}
       <section className="section-pad">
         <Container>
           <SectionHeader
@@ -133,8 +147,7 @@ export default function Home() {
         </Container>
       </section>
 
-      <GallerySection content={homeContent.gallery} limit={3} showButton />
-
+      {/* Call To Action Section */}
       <section className="py-20">
         <Container>
           <Reveal>
@@ -144,8 +157,7 @@ export default function Home() {
               </h2>
               <Button
                 href={homeContent.cta.button.href}
-                variant="light"
-                className="mt-6 lg:mt-0 text-green-700 border-3 border-green-400"
+                className="bg-white text-gray-600"
               >
                 {homeContent.cta.button.label}
               </Button>
