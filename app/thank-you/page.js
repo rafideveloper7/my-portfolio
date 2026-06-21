@@ -22,7 +22,7 @@ export default function ThankYouPage() {
               Thank You!
             </h1>
             <p className="mt-4 text-lg text-muted">
-              Your message has been sent successfully. I'll get back to you within 24 hours.
+              Your message has been sent successfully. I&apos;ll get back to you within 24 hours.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button href="/">Back to Home</Button>

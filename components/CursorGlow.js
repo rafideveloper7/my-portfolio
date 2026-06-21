@@ -8,7 +8,7 @@ export default function CursorGlow() {
   const y = useMotionValue(0);
   const smoothX = useSpring(x, { stiffness: 80, damping: 18 });
   const smoothY = useSpring(y, { stiffness: 80, damping: 18 });
-
+  
   useEffect(() => {
     const finePointer = window.matchMedia("(pointer: fine)").matches;
     if (!finePointer) return;
