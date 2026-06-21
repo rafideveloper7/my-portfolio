@@ -13,8 +13,8 @@ export default function PortfolioPage() {
       <section className="section-pad">
         <Container>
           <SectionHeader eyebrow="Portfolio" title="Full-stack project structures ready for real-world builds." text="Browse web apps, dashboards, e-commerce systems, APIs, and business website projects designed for clean implementation and future expansion." />
-          <div className="mt-10">
-            <PortfolioGrid />
+          <div className="m-10 p-16">
+            <PortfolioGrid className="" />
           </div>
         </Container>
       </section>

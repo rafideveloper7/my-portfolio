@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import PortfolioGrid from "@/components/PortfolioGrid";
+import ProjectCard from "@/components/ProjectCard";
+import { projects } from "@/data/projects";
 
 export default function FeaturedProjectsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -12,7 +13,6 @@ export default function FeaturedProjectsSlider() {
   const [startX, setStartX] = useState(0);
   const [hasReachedEnd, setHasReachedEnd] = useState(false);
   const [hasReachedStart, setHasReachedStart] = useState(true);
-  const [containerWidth, setContainerWidth] = useState(0);
   
   const sliderRef = useRef(null);
   const containerRef = useRef(null);
@@ -20,45 +20,36 @@ export default function FeaturedProjectsSlider() {
   const wheelDeltaAccumulator = useRef(0);
   const isLockedRef = useRef(false);
 
-  const totalSlides = 6;
+  const totalSlides = projects.length;
+  const displayProjects = projects.slice(0, totalSlides);
 
-  // Responsive card count
+  // Responsive card count and widths
+  const [cardWidth, setCardWidth] = useState('100%');
+  
   useEffect(() => {
     const updateVisibleCards = () => {
       const width = window.innerWidth;
       let cards = 1;
+      let widthStyle = 'calc(100vw - 3rem)';
       
       if (width >= 1024) {
         cards = 3;
+        widthStyle = 'calc((100vw - 8rem) / 3)';
       } else if (width >= 640) {
         cards = 2;
+        widthStyle = 'calc((100vw - 4.5rem) / 2)';
       } else {
         cards = 1;
+        widthStyle = 'calc(100vw - 3rem)';
       }
       
       setVisibleCards(cards);
-      
-      // Update container width
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
+      setCardWidth(widthStyle);
     };
 
     updateVisibleCards();
     window.addEventListener("resize", updateVisibleCards);
     return () => window.removeEventListener("resize", updateVisibleCards);
-  }, []);
-
-  // Update container width on resize
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-    
-    window.addEventListener('resize', updateWidth);
-    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
   const maxIndex = Math.max(0, totalSlides - visibleCards);
@@ -230,23 +221,6 @@ export default function FeaturedProjectsSlider() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentIndex, maxIndex, isTransitioning]);
 
-  // Calculate card width based on visible cards
-  const getCardWidth = () => {
-    if (!containerWidth) return '100%';
-    
-    const gap = window.innerWidth >= 640 ? 24 : 16; // gap-6 = 24px, gap-4 = 16px
-    const padding = 16; // px-2 = 16px total (8px each side)
-    const availableWidth = containerWidth - padding;
-    
-    if (visibleCards === 1) {
-      return `calc(100% - ${gap}px)`;
-    } else if (visibleCards === 2) {
-      return `calc((100% - ${gap}px) / 2)`;
-    } else {
-      return `calc((100% - ${gap * 2}px) / 3)`;
-    }
-  };
-
   // Translation
   const translationStyle = {
     transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
@@ -259,7 +233,7 @@ export default function FeaturedProjectsSlider() {
     <div 
       ref={containerRef}
       className="w-full relative select-none py-12 overflow-visible"
-      style={{ minHeight: '450px' }}
+      style={{ minHeight: '500px' }}
     >
       {/* Scroll indicator */}
       <div className="text-center mb-6">
@@ -290,29 +264,25 @@ export default function FeaturedProjectsSlider() {
         onTouchMove={handleTouchMove}
       >
         <div
-          className="flex flex-nowrap will-change-transform px-2"
+          className="flex flex-nowrap will-change-transform"
           style={translationStyle}
         >
-          {/* Cards container with fixed widths */}
-          <div className="flex flex-nowrap gap-4 sm:gap-6">
-            {Array.from({ length: totalSlides }).map((_, index) => (
+          <div className="flex flex-nowrap gap-4 sm:gap-6 px-2">
+            {displayProjects.map((project, index) => (
               <div
-                key={index}
+                key={project.id}
                 className="flex-shrink-0"
                 style={{
-                  width: visibleCards === 1 
-                    ? 'calc(100vw - 3rem)' 
-                    : visibleCards === 2 
-                      ? 'calc((100vw - 4.5rem) / 2)' 
-                      : 'calc((100vw - 8rem) / 3)',
-                  minWidth: visibleCards === 1 
-                    ? 'calc(100vw - 3rem)' 
-                    : visibleCards === 2 
-                      ? 'calc((100vw - 4.5rem) / 2)' 
-                      : 'calc((100vw - 8rem) / 3)'
+                  width: cardWidth,
+                  minWidth: cardWidth,
                 }}
               >
-                <PortfolioGrid limit={1} startIndex={index} />
+                <ProjectCard
+                  project={project}
+                  onDetails={() => {}}
+                  priority={index === 0}
+                  className="w-full h-[420px] sm:h-[440px] lg:h-[460px]"
+                />
               </div>
             ))}
           </div>

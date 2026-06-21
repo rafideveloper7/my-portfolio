@@ -6,24 +6,14 @@ import { useMemo, useState } from "react";
 import { filters, projects } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
 
-export default function PortfolioGrid({ limit, startIndex = 0, layout = "grid" }) {
+export default function PortfolioGrid({ limit, layout = "grid" }) {
   const [active, setActive] = useState("All");
   const [selected, setSelected] = useState(null);
   
   const visible = useMemo(() => {
-    // First filter by category
     const filtered = active === "All" ? projects : projects.filter((project) => project.category === active);
-    
-    // Then apply startIndex and limit
-    let result = filtered;
-    if (startIndex > 0) {
-      result = result.slice(startIndex);
-    }
-    if (limit) {
-      result = result.slice(0, limit);
-    }
-    return result;
-  }, [active, limit, startIndex]);
+    return limit ? filtered.slice(0, limit) : filtered;
+  }, [active, limit]);
 
   return (
     <>
@@ -45,12 +35,12 @@ export default function PortfolioGrid({ limit, startIndex = 0, layout = "grid" }
 
       {/* Conditional layout based on prop */}
       {layout === "slider" ? (
-        // Slider layout - horizontal flex row
+        // Slider layout - horizontal flex row with proper card widths
         <div className="flex flex-nowrap gap-4 sm:gap-6">
           <AnimatePresence mode="popLayout">
             {visible.map((project, index) => (
               <div 
-                key={project.title} 
+                key={project.id} // Use id instead of title
                 className="flex-shrink-0"
                 style={{
                   width: 'calc(100vw - 3rem)',
@@ -60,6 +50,7 @@ export default function PortfolioGrid({ limit, startIndex = 0, layout = "grid" }
                   project={project} 
                   onDetails={setSelected} 
                   priority={index === 0}
+                  className="w-full h-[380px]" // Fixed height for consistency
                 />
               </div>
             ))}
@@ -71,7 +62,7 @@ export default function PortfolioGrid({ limit, startIndex = 0, layout = "grid" }
           <AnimatePresence mode="popLayout">
             {visible.map((project, index) => (
               <ProjectCard 
-                key={project.title} 
+                key={project.id} // Use id instead of title
                 project={project} 
                 onDetails={setSelected} 
                 priority={index === 0} 
